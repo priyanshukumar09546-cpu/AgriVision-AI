@@ -70,7 +70,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onRouteChange }) => {
 
         {/* Build Verification Tag */}
         <div className="py-3 text-center text-[10.5px] font-semibold text-slate-400 bg-white border-t border-slate-100">
-          <span>AgriVision AI • Build: ec7ef08</span>
+          <span>AgriVision AI • Build: ec7ef09</span>
         </div>
       </main>
 
