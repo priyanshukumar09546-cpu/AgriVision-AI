@@ -145,7 +145,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             href="/"
             onClick={(e) => handleNavClick(e, '/')}
             className="flex items-center gap-2 select-none group shrink-0"
-            aria-label="AgriVision AI - Healthy Crops. Brighter Tomorrow."
+            aria-label="AgriVision AI - Smarter Farming for a Healthier Tomorrow"
           >
             <img
               src="/assets/leaf_logo_vector.svg"
@@ -164,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
               </div>
               <span className="text-[10.5px] font-normal text-slate-500 tracking-tight mt-[3px]">
-                Healthy Crops. Brighter Tomorrow.
+                Smarter Farming for a Healthier Tomorrow
               </span>
             </div>
           </a>
