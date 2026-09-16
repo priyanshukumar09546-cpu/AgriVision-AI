@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Zap, Layers, BarChart3, AlertTriangle, Sparkles, ShieldCheck } from 'lucide-react';
+import { ArrowRight, AlertTriangle, Sparkles, ShieldCheck } from 'lucide-react';
 
 interface HeroSectionProps {
   onDetectClick?: () => void;
@@ -118,15 +118,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             {/* Feature Pills */}
             <div className="flex flex-wrap gap-2 pt-1">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold">
+              <button
+                type="button"
+                onClick={onLearnMoreClick}
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold transition-colors cursor-pointer"
+              >
                 <span>🌱 Detect Diseases</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold">
+              </button>
+              <button
+                type="button"
+                onClick={onLearnMoreClick}
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold transition-colors cursor-pointer"
+              >
                 <span>💬 Expert Guidance</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold">
+              </button>
+              <button
+                type="button"
+                onClick={onLearnMoreClick}
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold transition-colors cursor-pointer"
+              >
                 <span>📊 Better Yield</span>
-              </div>
+              </button>
             </div>
 
             {/* Primary Get Started CTA Button */}
