@@ -96,57 +96,41 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Content Container aligned with site grid */}
         <div className="relative z-10 w-full max-w-[1240px] mx-auto px-6 py-8 sm:py-10 lg:py-12">
           <div className="max-w-xl xl:max-w-2xl space-y-4 sm:space-y-5">
-            {/* Main Heading matching reference */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[45px] xl:text-[48px] font-extrabold tracking-tight leading-[1.14]">
-              <span className="text-[#0F172A] block">AI-Powered</span>
-              <span className="text-[#15803D]">Crop Disease </span>
-              <span className="text-[#0F172A]">Detection</span>
+            {/* AI MEETS AGRICULTURE Pill Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100/90 text-emerald-800 rounded-full text-xs font-bold tracking-wide uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+              <span>AI Meets Agriculture</span>
+            </div>
+
+            {/* Main Heading matching reference Image 1 */}
+            <h1 className="text-3xl sm:text-4xl lg:text-[45px] xl:text-[48px] font-extrabold tracking-tight leading-[1.12] text-[#0F172A]">
+              <span>Healthy Crops</span> <br />
+              <span>Brighter </span>
+              <span className="text-emerald-700 underline decoration-emerald-500 decoration-wavy underline-offset-4">
+                Tomorrows
+              </span>
             </h1>
 
             {/* Description */}
-            <p className="text-[13.5px] sm:text-[14.5px] lg:text-[15px] text-slate-700 max-w-lg leading-relaxed font-normal">
-              Upload a photo of a plant leaf and get instant, accurate disease detection with AI.
-              Protect your crops, increase yield, and build a healthier tomorrow.
+            <p className="text-xs sm:text-sm text-slate-700 max-w-md leading-relaxed font-medium">
+              Detect diseases, get expert advice, track your crops and build a smarter tomorrow with AI.
             </p>
 
-            {/* Three Feature Badges matching reference */}
-            <div className="grid grid-cols-3 gap-2.5 sm:gap-4 pt-1 max-w-lg">
-              {/* Feature 1: Fast & Accurate */}
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#15803D] text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <Zap className="w-4 h-4 fill-white" />
-                </div>
-                <div className="min-w-0">
-                  <h2 className="text-[11.5px] font-bold text-[#0F172A] leading-tight">Fast & Accurate</h2>
-                  <p className="text-[10px] text-slate-600 leading-tight mt-0.5">Get results in seconds</p>
-                </div>
+            {/* Feature Pills */}
+            <div className="flex flex-wrap gap-2 pt-1">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold">
+                <span>🌱 Detect Diseases</span>
               </div>
-
-              {/* Feature 2: Multiple Crops */}
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#15803D] text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <Layers className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <h2 className="text-[11.5px] font-bold text-[#0F172A] leading-tight">Multiple Crops</h2>
-                  <p className="text-[10px] text-slate-600 leading-tight mt-0.5">Support for 20+ crops</p>
-                </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold">
+                <span>💬 Expert Guidance</span>
               </div>
-
-              {/* Feature 3: AI Insights */}
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#15803D] text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <BarChart3 className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <h2 className="text-[11.5px] font-bold text-[#0F172A] leading-tight">AI Insights</h2>
-                  <p className="text-[10px] text-slate-600 leading-tight mt-0.5">Treatment & prevention tips</p>
-                </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-full text-xs font-semibold">
+                <span>📊 Better Yield</span>
               </div>
             </div>
 
-            {/* Action Buttons matching reference */}
-            <div className="flex items-center gap-3 pt-2">
+            {/* Primary Get Started CTA Button */}
+            <div className="pt-2">
               <a
                 href="/detect"
                 onClick={(e) => {
@@ -155,35 +139,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     onDetectClick();
                   }
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-white bg-[#15803D] hover:bg-[#166534] active:bg-[#14532D] rounded-lg shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 rounded-full shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
               >
-                <span>Detect Disease Now</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Get Started</span>
+                <ArrowRight className="w-4 h-4" />
               </a>
-
-              <a
-                href="#learn-more"
-                onClick={(e) => {
-                  if (onLearnMoreClick) {
-                    e.preventDefault();
-                    onLearnMoreClick();
-                  }
-                }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-slate-700 bg-white/95 hover:bg-white border border-slate-300 rounded-lg shadow-2xs hover:shadow-xs transition-colors"
-              >
-                Learn More
-              </a>
-            </div>
-
-            {/* Bottom-left Subtext with green accent bar matching reference */}
-            <div className="pt-2">
-              <p className="text-[11.5px] font-semibold text-[#0F172A] leading-tight">
-                Healthy Farms
-              </p>
-              <p className="text-[11.5px] font-semibold text-[#0F172A] leading-tight">
-                Stronger Communities
-              </p>
-              <div className="w-6 h-[2px] bg-[#15803D] rounded-full mt-1" />
             </div>
           </div>
         </div>

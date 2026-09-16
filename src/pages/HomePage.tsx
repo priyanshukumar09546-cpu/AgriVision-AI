@@ -5,6 +5,8 @@ import { CropSelector } from '../components/CropSelector';
 import { UploadPanel } from '../components/UploadPanel';
 import { FeatureCards } from '../components/FeatureCards';
 import { BottomStats } from '../components/BottomStats';
+import { BottomNav } from '../components/BottomNav';
+import { GeminiAssistantModal } from '../components/ai/GeminiAssistantModal';
 import { DetectionResultModal } from '../components/detect/DetectionResultModal';
 import { detectCropDisease } from '../services/diseaseDetectionService';
 import type { DiseaseDetectionResult } from '../services/diseaseDetectionService';
@@ -30,6 +32,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onRouteChange }) => {
   // Diagnostic / AI analysis state
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [detectionResult, setDetectionResult] = useState<DiseaseDetectionResult | null>(null);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
 
   const showNotification = (msg: string) => {
     setNotification(msg);
@@ -102,7 +105,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onRouteChange }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col selection:bg-emerald-100 selection:text-emerald-900 font-sans antialiased text-[#0F172A]">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col selection:bg-emerald-100 selection:text-emerald-900 font-sans antialiased text-[#0F172A] pb-16 md:pb-0">
       {/* 1. Exact Navbar */}
       <Navbar activeRoute={activeRoute} onRouteChange={handleRouteChange} />
 
@@ -121,8 +124,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onRouteChange }) => {
             if (selectedImage) {
               handleRunDetection();
             } else {
-              const el = document.getElementById('crops-section');
-              el?.scrollIntoView({ behavior: 'smooth' });
+              handleRouteChange('/detect');
             }
           }}
           onLearnMoreClick={() => {
@@ -163,8 +165,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onRouteChange }) => {
           </div>
         </section>
 
-        {/* 7. Four Feature Cards */}
-        <FeatureCards />
+        {/* 7. Four Feature Cards & AI Assistant Banner */}
+        <FeatureCards
+          onRouteChange={handleRouteChange}
+          onOpenAiAssistant={() => setIsAiModalOpen(true)}
+        />
 
         {/* 8. Bottom Statistics Banner */}
         <BottomStats />
@@ -182,6 +187,19 @@ export const HomePage: React.FC<HomePageProps> = ({ onRouteChange }) => {
           }}
         />
       )}
+
+      {/* AI Assistant Modal */}
+      <GeminiAssistantModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+      />
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav
+        activeRoute={activeRoute}
+        onRouteChange={handleRouteChange}
+        onOpenAiAssistant={() => setIsAiModalOpen(true)}
+      />
     </div>
   );
 };

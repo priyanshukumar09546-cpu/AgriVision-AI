@@ -15,6 +15,9 @@ import type { CropInfo } from '../data/cropsData';
 import { detectCropDisease } from '../services/diseaseDetectionService';
 import type { DiseaseDetectionResult } from '../services/diseaseDetectionService';
 
+import { BottomNav } from '../components/BottomNav';
+import { GeminiAssistantModal } from '../components/ai/GeminiAssistantModal';
+
 interface DetectDiseasePageProps {
   onRouteChange?: (route: string) => void;
 }
@@ -36,6 +39,7 @@ export const DetectDiseasePage: React.FC<DetectDiseasePageProps> = ({
   const [analysisStage, setAnalysisStage] = useState<string>('');
   const [analysisProgress, setAnalysisProgress] = useState<number>(0);
   const [detectionResult, setDetectionResult] = useState<DiseaseDetectionResult | null>(null);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
 
   // User notification toast
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -266,6 +270,19 @@ export const DetectDiseasePage: React.FC<DetectDiseasePageProps> = ({
           onReset={handleResetDetection}
         />
       )}
+
+      {/* 8. AI Assistant Modal */}
+      <GeminiAssistantModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+      />
+
+      {/* 9. Mobile Bottom Navigation */}
+      <BottomNav
+        activeRoute="/detect"
+        onRouteChange={onRouteChange}
+        onOpenAiAssistant={() => setIsAiModalOpen(true)}
+      />
     </div>
   );
 };
