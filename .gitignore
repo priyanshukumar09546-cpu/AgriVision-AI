@@ -1,4 +1,4 @@
-﻿# Environment variables / secrets
+# Environment variables / secrets
 .env
 .env.*
 !.env.example
@@ -45,3 +45,11 @@ Thumbs.db
 
 # Local scratch/testing files
 scratch/
+
+# ML Datasets & Large Checkpoints
+data/
+datasets/
+*.zip
+*.tar.gz
+*.onnx
+

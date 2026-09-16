@@ -819,6 +819,18 @@ def detect_crop_disease():
             "error": res.get("error", "Unable to confidently identify this image. Please upload a clearer crop/leaf image.")
         })
 
+    # Handle Low Confidence Diagnostic State (< 65%)
+    if res.get("status") == "low_confidence":
+        return jsonify({
+            "success": True,
+            "status": "low_confidence",
+            "crop": res.get("crop", "Crop"),
+            "disease": res.get("disease", "Unable to determine reliably from this image"),
+            "confidence": res.get("confidence", 0.0),
+            "message": res.get("message", "Unable to determine disease reliably from this image. Model confidence is below the diagnostic threshold (65%)."),
+            "metrics": res.get("metrics", {})
+        })
+
     image_url = f"/uploads/{filename}"
     scan_id = str(uuid.uuid4())
     now_iso = datetime.utcnow().isoformat()
@@ -836,7 +848,7 @@ def detect_crop_disease():
         res["disease"],
         res["scientificName"],
         res["confidence"],
-        res["severity"],
+        res.get("severity", "Moderate"),
         image_url,
         json.dumps(res["symptoms"]),
         json.dumps(res["treatments"]),
@@ -848,17 +860,19 @@ def detect_crop_disease():
 
     return jsonify({
         "success": True,
+        "status": "success",
         "scanId": scan_id,
         "isMock": False,
         "crop": res["crop"],
         "disease": res["disease"],
         "scientificName": res["scientificName"],
         "confidence": res["confidence"],
-        "severity": res["severity"],
-        "metrics": res["metrics"],
+        "severity": res.get("severity", "Moderate"),
+        "metrics": res.get("metrics", {}),
         "symptoms": res["symptoms"],
         "causes": res["causes"],
         "treatments": res["treatments"],
+        "provenance": res.get("provenance", "ICAR / Agricultural Extension Knowledge Base"),
         "imageUrl": image_url,
         "analyzedAt": now_time
     })
