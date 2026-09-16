@@ -67,6 +67,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onRouteChange }) => {
           onViewAllClick={() => handleRouteChange('/insights')}
           onArticleClick={() => handleRouteChange('/insights')}
         />
+
+        {/* Build Verification Tag */}
+        <div className="py-3 text-center text-[10.5px] font-semibold text-slate-400 bg-white border-t border-slate-100">
+          <span>AgriVision AI • Build: ec7ef08</span>
+        </div>
       </main>
 
       {/* Real Gemini AI Assistant Modal */}
