@@ -2,8 +2,13 @@ import os
 import cv2
 import numpy as np
 from PIL import Image
-import torch
-import torchvision.transforms as transforms
+
+try:
+    import torch
+    import torchvision.transforms as transforms
+except ImportError:
+    torch = None
+    transforms = None
 
 # Verified Plant Pathology Knowledge Base
 PATHOLOGY_KNOWLEDGE_BASE = {
