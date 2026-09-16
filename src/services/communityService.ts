@@ -1,10 +1,11 @@
 /**
  * AgriVision AI Real Community Service
- * Persists discussions, likes, comments, and bookmarks to SQLite database.
+ * Persists discussions, likes, comments, and bookmarks to backend database.
  * No fake users or mock discussions.
  */
 
 import { getStoredAuthUser } from './authService';
+import { buildApiUrl, getAuthToken } from './apiClient';
 
 export interface PostAuthor {
   id: string;
@@ -38,10 +39,10 @@ export interface RealPostItem {
   commentsCount: number;
   isLiked?: boolean;
   isBookmarked?: boolean;
-  createdAt: string;
+  createdAt?: string;
 }
 
-export interface FetchPostsFilter {
+export interface CommunityFilterOptions {
   tab?: 'all' | 'my_posts' | 'bookmarked';
   crop?: string;
   category?: string;
@@ -49,12 +50,12 @@ export interface FetchPostsFilter {
 }
 
 export async function fetchCommunityPosts(
-  filters: FetchPostsFilter = {}
+  filters: CommunityFilterOptions = {}
 ): Promise<RealPostItem[]> {
   const currentUser = getStoredAuthUser();
   const params = new URLSearchParams();
 
-  if (currentUser) {
+  if (currentUser?.id) {
     params.append('currentUserId', currentUser.id);
   }
   if (filters.tab) {
@@ -71,7 +72,11 @@ export async function fetchCommunityPosts(
   }
 
   try {
-    const res = await fetch(`/api/community/posts?${params.toString()}`);
+    const token = getAuthToken();
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(buildApiUrl(`/api/community/posts?${params.toString()}`), { headers });
     if (!res.ok) return [];
     const data = await res.json();
     return data.posts || [];
@@ -110,8 +115,13 @@ export async function createCommunityPost(formData: {
   }
 
   try {
-    const res = await fetch('/api/community/posts', {
+    const token = getAuthToken();
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(buildApiUrl('/api/community/posts'), {
       method: 'POST',
+      headers,
       body: fd,
     });
     if (!res.ok) {
@@ -133,9 +143,13 @@ export async function toggleLikePost(
     throw new Error('Please sign in to like discussions.');
   }
 
+  const token = getAuthToken();
+  const headers: Record<string, string> = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
   const res = await fetch(
-    `/api/community/posts/${encodeURIComponent(postId)}/like?userId=${encodeURIComponent(currentUser.id)}`,
-    { method: 'POST' }
+    buildApiUrl(`/api/community/posts/${encodeURIComponent(postId)}/like?userId=${encodeURIComponent(currentUser.id)}`),
+    { method: 'POST', headers }
   );
 
   if (!res.ok) {
@@ -158,9 +172,13 @@ export async function toggleBookmarkPost(
     throw new Error('Please sign in to save bookmarks.');
   }
 
+  const token = getAuthToken();
+  const headers: Record<string, string> = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
   const res = await fetch(
-    `/api/community/posts/${encodeURIComponent(postId)}/bookmark?userId=${encodeURIComponent(currentUser.id)}`,
-    { method: 'POST' }
+    buildApiUrl(`/api/community/posts/${encodeURIComponent(postId)}/bookmark?userId=${encodeURIComponent(currentUser.id)}`),
+    { method: 'POST', headers }
   );
 
   if (!res.ok) {
@@ -184,9 +202,13 @@ export async function addPostComment(
   }
 
   try {
-    const res = await fetch(`/api/community/posts/${encodeURIComponent(postId)}/comment`, {
+    const token = getAuthToken();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(buildApiUrl(`/api/community/posts/${encodeURIComponent(postId)}/comment`), {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         content: content.trim(),
         user_id: currentUser.id,
@@ -212,7 +234,11 @@ export async function addPostComment(
 
 export async function fetchPostComments(postId: string): Promise<PostComment[]> {
   try {
-    const res = await fetch(`/api/community/posts/${encodeURIComponent(postId)}/comments`);
+    const token = getAuthToken();
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(buildApiUrl(`/api/community/posts/${encodeURIComponent(postId)}/comments`), { headers });
     if (!res.ok) return [];
     const data = await res.json();
     return data.comments || [];
@@ -232,9 +258,13 @@ export async function updateCommunityPost(
   }
 
   try {
-    const res = await fetch(`/api/community/posts/${encodeURIComponent(postId)}`, {
+    const token = getAuthToken();
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(buildApiUrl(`/api/community/posts/${encodeURIComponent(postId)}`), {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         userId: currentUser.id,
         title: formData.title.trim(),
@@ -262,9 +292,13 @@ export async function deleteCommunityPost(
   }
 
   try {
+    const token = getAuthToken();
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const res = await fetch(
-      `/api/community/posts/${encodeURIComponent(postId)}?userId=${encodeURIComponent(currentUser.id)}`,
-      { method: 'DELETE' }
+      buildApiUrl(`/api/community/posts/${encodeURIComponent(postId)}?userId=${encodeURIComponent(currentUser.id)}`),
+      { method: 'DELETE', headers }
     );
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
@@ -285,9 +319,13 @@ export async function deleteCommunityComment(
   }
 
   try {
+    const token = getAuthToken();
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
     const res = await fetch(
-      `/api/community/comments/${encodeURIComponent(commentId)}?userId=${encodeURIComponent(currentUser.id)}`,
-      { method: 'DELETE' }
+      buildApiUrl(`/api/community/comments/${encodeURIComponent(commentId)}?userId=${encodeURIComponent(currentUser.id)}`),
+      { method: 'DELETE', headers }
     );
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));

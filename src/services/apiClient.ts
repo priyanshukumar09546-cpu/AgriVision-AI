@@ -48,6 +48,27 @@ export function clearAuthToken(): void {
   }
 }
 
+export function buildApiUrl(endpoint: string): string {
+  if (!endpoint) return getApiBase();
+  if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+    return endpoint;
+  }
+  const base = getApiBase();
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+
+  if (base.startsWith('http://') || base.startsWith('https://')) {
+    if (cleanEndpoint.startsWith('/api/')) {
+      return `${base.replace(/\/api$/, '')}${cleanEndpoint}`;
+    }
+    return `${base}${cleanEndpoint}`;
+  }
+
+  if (cleanEndpoint.startsWith('/api/')) {
+    return cleanEndpoint;
+  }
+  return `${base}${cleanEndpoint}`;
+}
+
 export async function apiRequest<T = any>(
   endpoint: string,
   options: RequestInit = {}
@@ -63,31 +84,13 @@ export async function apiRequest<T = any>(
     headers.set('Content-Type', 'application/json');
   }
 
-  const apiBase = getApiBase();
-  const url = endpoint.startsWith('http')
-    ? endpoint
-    : `${apiBase}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
+  const url = buildApiUrl(endpoint);
 
   try {
-    let res: Response;
-    try {
-      res = await fetch(url, {
-        ...options,
-        headers,
-      });
-    } catch (primaryFetchErr) {
-      // If fetching relative URL failed, retry directly against local backend daemon
-      if (!endpoint.startsWith('http') && !url.startsWith('http')) {
-        const fallbackUrl = `http://127.0.0.1:8000/api${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
-        console.warn(`[apiClient] Relative fetch to ${url} failed. Retrying direct to backend ${fallbackUrl}`);
-        res = await fetch(fallbackUrl, {
-          ...options,
-          headers,
-        });
-      } else {
-        throw primaryFetchErr;
-      }
-    }
+    const res = await fetch(url, {
+      ...options,
+      headers,
+    });
 
     const contentType = res.headers.get('content-type') || '';
     let json: any = null;

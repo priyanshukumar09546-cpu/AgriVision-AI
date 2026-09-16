@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, Bell, ChevronDown, User, X, LogOut, Settings, Sprout, ShieldAlert, MessageSquare, LayoutDashboard, Bookmark, History, Sparkles } from 'lucide-react';
 import { getStoredAuthUser, clearAuthUser, subscribeAuth } from '../services/authService';
 import type { AuthUser } from '../services/authService';
+import { buildApiUrl } from '../services/apiClient';
 import { ProfileModal } from './auth/ProfileModal';
 import { GeminiAssistantModal } from './ai/GeminiAssistantModal';
 
@@ -67,7 +68,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     setIsSearching(true);
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+        const res = await fetch(buildApiUrl(`/api/search?q=${encodeURIComponent(q)}`));
         if (res.ok) {
           const data = await res.json();
           setSearchResults(data.results || []);

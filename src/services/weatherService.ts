@@ -4,6 +4,8 @@
  * No hardcoded or fake temperatures.
  */
 
+import { buildApiUrl } from './apiClient';
+
 export interface WeatherDayForecast {
   day: string;
   date: string;
@@ -50,8 +52,8 @@ export async function fetchLiveWeather(
   }
 
   try {
-    const url = `/api/weather?lat=${latitude}&lon=${longitude}&location=${encodeURIComponent(location || 'Local Field')}`;
-    const res = await fetch(url);
+    const endpoint = `/api/weather?lat=${latitude}&lon=${longitude}&location=${encodeURIComponent(location || 'Local Field')}`;
+    const res = await fetch(buildApiUrl(endpoint));
     if (!res.ok) {
       return {
         success: false,

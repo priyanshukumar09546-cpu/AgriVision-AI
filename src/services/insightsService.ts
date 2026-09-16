@@ -4,6 +4,8 @@
  * Shows honest empty state if no scan records exist.
  */
 
+import { buildApiUrl } from './apiClient';
+
 export interface RealInsightsResult {
   hasData: boolean;
   totalScans: number;
@@ -28,7 +30,7 @@ export interface PlatformStats {
 
 export async function fetchRealInsights(cropFilter: string = 'all'): Promise<RealInsightsResult> {
   try {
-    const res = await fetch(`/api/insights?crop=${encodeURIComponent(cropFilter)}`);
+    const res = await fetch(buildApiUrl(`/api/insights?crop=${encodeURIComponent(cropFilter)}`));
     if (!res.ok) {
       return {
         hasData: false,
@@ -50,7 +52,7 @@ export async function fetchRealInsights(cropFilter: string = 'all'): Promise<Rea
 
 export async function fetchPlatformStats(): Promise<PlatformStats> {
   try {
-    const res = await fetch('/api/stats');
+    const res = await fetch(buildApiUrl('/api/stats'));
     if (!res.ok) {
       return {
         farmersRegistered: 0,

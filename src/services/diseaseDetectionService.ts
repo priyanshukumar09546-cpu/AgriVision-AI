@@ -5,6 +5,7 @@
  */
 
 import { getStoredAuthUser } from './authService';
+import { buildApiUrl, getAuthToken } from './apiClient';
 
 export interface DiseaseDetectionResult {
   scanId?: string;
@@ -81,8 +82,13 @@ export async function detectCropDisease(
     formData.append('userId', currentUser.id);
   }
 
-  const response = await fetch('/api/detect', {
+  const token = getAuthToken();
+  const headers: Record<string, string> = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const response = await fetch(buildApiUrl('/api/detect'), {
     method: 'POST',
+    headers,
     body: formData,
   });
 
@@ -127,8 +133,12 @@ export async function detectCropDisease(
 
 export async function fetchUserScans(userId?: string): Promise<UserScanRecord[]> {
   try {
-    const url = userId ? `/api/scans?userId=${encodeURIComponent(userId)}` : '/api/scans';
-    const res = await fetch(url);
+    const endpoint = userId ? `/api/scans?userId=${encodeURIComponent(userId)}` : '/api/scans';
+    const token = getAuthToken();
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(buildApiUrl(endpoint), { headers });
     if (!res.ok) return [];
     const data = await res.json();
     return data.scans || [];
@@ -141,8 +151,12 @@ export async function fetchUserScans(userId?: string): Promise<UserScanRecord[]>
 export async function deleteUserScan(scanId: string): Promise<boolean> {
   try {
     const currentUser = getStoredAuthUser();
-    const url = currentUser ? `/api/scans/${encodeURIComponent(scanId)}?userId=${encodeURIComponent(currentUser.id)}` : `/api/scans/${encodeURIComponent(scanId)}`;
-    const res = await fetch(url, { method: 'DELETE' });
+    const endpoint = currentUser ? `/api/scans/${encodeURIComponent(scanId)}?userId=${encodeURIComponent(currentUser.id)}` : `/api/scans/${encodeURIComponent(scanId)}`;
+    const token = getAuthToken();
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const res = await fetch(buildApiUrl(endpoint), { method: 'DELETE', headers });
     return res.ok;
   } catch (e) {
     console.error('Failed to delete scan:', e);
