@@ -286,15 +286,26 @@ def load_trained_model():
             nn.Linear(in_features, len(classes))
         )
 
+        # Check for remote MODEL_URL environment override if local file missing
+        if not MODEL_PATH.exists() and os.getenv("MODEL_URL"):
+            model_url = os.getenv("MODEL_URL")
+            print(f"[AI ENGINE] Local model file missing. Downloading model from {model_url}...")
+            try:
+                import urllib.request
+                urllib.request.urlretrieve(model_url, MODEL_PATH)
+                print(f"[AI ENGINE] Downloaded model file to {MODEL_PATH} ({MODEL_PATH.stat().st_size // (1024*1024)}MB)")
+            except Exception as dl_err:
+                print(f"[AI ENGINE] Error downloading remote model from {model_url}: {dl_err}")
+
         if MODEL_PATH.exists():
             checkpoint = torch.load(MODEL_PATH, map_location="cpu")
             model.load_state_dict(checkpoint)
             model.eval()
             _GLOBAL_MODEL = model
-            print(f"[AI ENGINE] PyTorch MobileNetV3 plant disease model successfully loaded from {MODEL_PATH}")
+            print(f"[AI ENGINE] PyTorch MobileNetV3 plant disease model successfully loaded from {MODEL_PATH} ({MODEL_PATH.stat().st_size // (1024*1024)}MB)")
             return _GLOBAL_MODEL, _GLOBAL_METADATA
         else:
-            print(f"[AI ENGINE] Model checkpoint {MODEL_PATH} not found yet. Using initialized model.")
+            print(f"[AI ENGINE] Model checkpoint {MODEL_PATH} not found yet. Initializing default weights.")
             model.eval()
             _GLOBAL_MODEL = model
             return _GLOBAL_MODEL, _GLOBAL_METADATA
