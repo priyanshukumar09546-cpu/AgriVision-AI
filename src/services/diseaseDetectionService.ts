@@ -101,11 +101,17 @@ export async function detectCropDisease(
     const message =
       errorJson.error ||
       errorJson.detail ||
-      'AI detection service is currently unavailable. Please check that the AgriVision backend is running.';
+      `AI detection service unavailable (${response.status}: ${response.statusText}). Please check that the AgriVision backend is running.`;
     throw new Error(message);
   }
 
-  const data = await response.json();
+  let data: any;
+  try {
+    data = await response.json();
+  } catch (parseErr) {
+    console.error('Failed to parse detection response:', parseErr);
+    throw new Error('Unexpected non-JSON response from AgriVision AI backend server.');
+  }
 
   if (!data.success) {
     throw new Error(
@@ -119,12 +125,16 @@ export async function detectCropDisease(
     isMock: false,
     crop: data.crop,
     disease: data.disease,
-    scientificName: data.scientificName,
+    scientificName: data.scientificName || 'Botanical Pathogen Complex',
     confidence: data.confidence,
-    severity: data.severity,
-    symptoms: data.symptoms || [],
-    causes: data.causes || [],
-    treatments: data.treatments || { organic: [], chemical: [], preventive: [] },
+    severity: data.severity || 'Moderate',
+    symptoms: Array.isArray(data.symptoms) ? data.symptoms : [],
+    causes: Array.isArray(data.causes) ? data.causes : [],
+    treatments: {
+      organic: Array.isArray(data.treatments?.organic) ? data.treatments.organic : [],
+      chemical: Array.isArray(data.treatments?.chemical) ? data.treatments.chemical : [],
+      preventive: Array.isArray(data.treatments?.preventive) ? data.treatments.preventive : [],
+    },
     metrics: data.metrics,
     imageUrl: data.imageUrl,
     analyzedAt: data.analyzedAt || new Date().toLocaleTimeString(),

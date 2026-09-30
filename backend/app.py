@@ -849,27 +849,30 @@ def detect_crop_disease():
     now_iso = datetime.utcnow().isoformat()
     now_time = datetime.now().strftime("%I:%M %p")
 
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO scans (id, user_id, crop, disease, scientific_name, confidence, severity, image_url, symptoms, treatments, preventive, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        scan_id,
-        user_id,
-        res["crop"],
-        res["disease"],
-        res["scientificName"],
-        res["confidence"],
-        res.get("severity", "Moderate"),
-        image_url,
-        json.dumps(res["symptoms"]),
-        json.dumps(res["treatments"]),
-        json.dumps(res["treatments"]["preventive"]),
-        now_iso
-    ))
-    conn.commit()
-    conn.close()
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO scans (id, user_id, crop, disease, scientific_name, confidence, severity, image_url, symptoms, treatments, preventive, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            scan_id,
+            user_id if user_id else None,
+            res["crop"],
+            res["disease"],
+            res["scientificName"],
+            res["confidence"],
+            res.get("severity", "Moderate"),
+            image_url,
+            json.dumps(res.get("symptoms", [])),
+            json.dumps(res.get("treatments", {})),
+            json.dumps(res.get("treatments", {}).get("preventive", [])),
+            now_iso
+        ))
+        conn.commit()
+        conn.close()
+    except Exception as db_err:
+        print(f"[API WARN] Failed to persist scan record: {db_err}")
 
     return jsonify({
         "success": True,

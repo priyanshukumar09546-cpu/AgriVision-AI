@@ -127,9 +127,10 @@ export const DetectDiseasePage: React.FC<DetectDiseasePageProps> = ({
       );
 
       setDetectionResult(result);
-    } catch (err) {
-      console.error(err);
-      showToast('Error analyzing leaf. Please try again.');
+    } catch (err: any) {
+      console.error('[AgriVision AI] Leaf Diagnostic Error:', err);
+      const friendlyMsg = err?.message || 'Error analyzing leaf. Please try again.';
+      showToast(friendlyMsg);
     } finally {
       setIsAnalyzing(false);
       setAnalysisProgress(0);
