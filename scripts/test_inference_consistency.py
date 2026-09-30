@@ -47,16 +47,14 @@ def test_low_confidence_crop_consistency():
     print("2. LOW-CONFIDENCE CROP CONSISTENCY TEST")
     print("==================================================")
 
-    from scripts.train_and_save_checkpoint import generate_sample
-    test_img = generate_sample("Corn_(maize)___Northern_Leaf_Blight", seed=42)
-    img_path = str(BACKEND_DIR / "test_corn_leaf.jpg")
-    test_img.save(img_path)
+    # Use a real test image
+    corn_test_dir = BASE_DIR / "data" / "processed" / "plantvillage" / "test" / "Corn_(maize)___Northern_Leaf_Blight"
+    corn_imgs = list(corn_test_dir.glob("*.jpg")) + list(corn_test_dir.glob("*.JPG"))
+    assert len(corn_imgs) > 0, "No corn test images found"
+    img_path = str(corn_imgs[0])
 
     # Call analyze_leaf_image passing crop override attempt 'tomato'
     res = analyze_leaf_image(img_path, selected_crop="tomato")
-    
-    if os.path.exists(img_path):
-        os.remove(img_path)
 
     print("Analyze Leaf Image Result:\n", json.dumps(res, indent=2))
 
@@ -79,15 +77,17 @@ def test_flask_api_consistency():
     from app import app
     client = app.test_client()
 
-    from scripts.train_and_save_checkpoint import generate_sample
-    test_img = generate_sample("Corn_(maize)___Northern_Leaf_Blight", seed=99)
-    img_byte_arr = io.BytesIO()
-    test_img.save(img_byte_arr, format='JPEG')
-    img_byte_arr.seek(0)
+    corn_test_dir = BASE_DIR / "data" / "processed" / "plantvillage" / "test" / "Corn_(maize)___Northern_Leaf_Blight"
+    corn_imgs = list(corn_test_dir.glob("*.jpg")) + list(corn_test_dir.glob("*.JPG"))
+    assert len(corn_imgs) > 0, "No corn test images found"
+    test_img_path = str(corn_imgs[0])
+
+    with open(test_img_path, "rb") as f:
+        img_bytes = f.read()
 
     # Intentionally pass cropId='tomato' to test that backend DOES NOT override ML predicted crop!
     data = {
-        'file': (img_byte_arr, 'test_corn_field.jpg'),
+        'file': (io.BytesIO(img_bytes), 'test_corn_field.jpg'),
         'cropId': 'tomato'
     }
 
