@@ -285,6 +285,72 @@ PATHOLOGY_KNOWLEDGE_BASE = {
         "chemical_treatment": ["None"],
         "preventive": ["Regular orchard scouting"],
         "provenance": "ICAR - CITH Standards"
+    },
+    "Grape___Black_rot": {
+        "crop": "Grape",
+        "disease": "Black Rot",
+        "scientific_name": "Guignardia bidwellii",
+        "symptoms": ["Small circular reddish-brown leaf spots with minute black pycnidia"],
+        "causes": ["Fungal pathogen Guignardia bidwellii overwintering in mummified berries"],
+        "organic_treatment": ["Copper octanoate or Bordeaux mixture applications"],
+        "chemical_treatment": ["Mancozeb or Myclobutanil protective sprays"],
+        "preventive": ["Prune vines to maximize airflow and solar penetration", "Sanitize mummified clusters"],
+        "provenance": "ICAR - National Research Centre for Grapes (NRCG)"
+    },
+    "Pepper,_bell___Bacterial_spot": {
+        "crop": "Pepper (Bell)",
+        "disease": "Bacterial Spot",
+        "scientific_name": "Xanthomonas campestris pv. vesicatoria",
+        "symptoms": ["Small circular water-soaked leaf spots turning dark brown with chlorotic halos"],
+        "causes": ["Bacterial pathogen spread by splashing water and handling wet plants"],
+        "organic_treatment": ["Copper hydroxide spray combined with Bacillus subtilis"],
+        "chemical_treatment": ["Copper Oxychloride + Streptocycline (authorized agricultural grade)"],
+        "preventive": ["Utilize certified disease-free seed and drip irrigation"],
+        "provenance": "ICAR - Indian Institute of Horticultural Research (IIHR)"
+    },
+    "Pepper,_bell___healthy": {
+        "crop": "Pepper (Bell)",
+        "disease": "Healthy Pepper Leaf",
+        "scientific_name": "Capsicum annuum",
+        "symptoms": ["Glossy green uniform foliage with intact leaf margins"],
+        "causes": ["Adequate nitrogen-phosphorus-potassium balance and pest exclusion"],
+        "organic_treatment": ["Regular neem cake and organic compost soil conditioning"],
+        "chemical_treatment": ["None"],
+        "preventive": ["Scout weekly for aphid and thrips vectors"],
+        "provenance": "ICAR - IIHR Standards"
+    },
+    "Peach___Bacterial_spot": {
+        "crop": "Peach",
+        "disease": "Bacterial Spot",
+        "scientific_name": "Xanthomonas arboricola pv. pruni",
+        "symptoms": ["Small angular water-soaked lesions progressing to shot-hole leaf perforation"],
+        "causes": ["Bacterium overwintering in twig cankers and buds"],
+        "organic_treatment": ["Low-rate copper sprays during dormancy and early leaf-out"],
+        "chemical_treatment": ["Oxytetracycline or Copper hydroxide protective applications"],
+        "preventive": ["Avoid high nitrogen fertilization which produces excessively succulent growth"],
+        "provenance": "ICAR - Central Institute of Temperate Horticulture (CITH)"
+    },
+    "Strawberry___Leaf_scorch": {
+        "crop": "Strawberry",
+        "disease": "Leaf Scorch",
+        "scientific_name": "Diplocarpon earlianum",
+        "symptoms": ["Numerous small purple to reddish-brown blotches on upper leaf surfaces"],
+        "causes": ["Fungal pathogen Diplocarpon earlianum thriving in warm wet conditions"],
+        "organic_treatment": ["Copper soap or liquid sulfur formulations"],
+        "chemical_treatment": ["Captan or Pyraclostrobin protective applications"],
+        "preventive": ["Plant in well-drained raised beds with straw mulch to keep leaves dry"],
+        "provenance": "USDA ARS / ICAR Temperate Horticulture"
+    },
+    "Soybean___healthy": {
+        "crop": "Soybean",
+        "disease": "Healthy Soybean Leaf",
+        "scientific_name": "Glycine max",
+        "symptoms": ["Trifoliate green leaves with no pustules, chlorosis, or necrotic spots"],
+        "causes": ["Effective rhizobial nitrogen fixation and weed-free canopy"],
+        "organic_treatment": ["Maintain beneficial mycorrhizal fungi in soil"],
+        "chemical_treatment": ["None"],
+        "preventive": ["Crop rotation with non-legume crops"],
+        "provenance": "ICAR - Indian Institute of Soybean Research (IISR)"
     }
 }
 

@@ -1,0 +1,265 @@
+{
+  "dataset_name": "AgriVision AI Production Real Crop Disease Dataset",
+  "date_prepared": "2026-09-30 22:20:45",
+  "primary_dataset": {
+    "name": "PlantVillage Dataset",
+    "citation": "Sharada P. Mohanty, David P. Hughes, Marcel Salath\u00e9 (2016). Using Deep Learning for Image-Based Plant Disease Detection. Frontiers in Plant Science 7:1419. doi:10.3389/fpls.2016.01419",
+    "repository": "https://github.com/spMohanty/PlantVillage-Dataset",
+    "huggingface": "https://huggingface.co/datasets/mohanty/PlantVillage",
+    "license": "Creative Commons Attribution-ShareAlike 4.0 International (CC-BY-SA 4.0)",
+    "crops_covered": 14,
+    "classes_covered": 38,
+    "total_extracted_samples": 3800,
+    "train_samples": 3040,
+    "val_samples": 380,
+    "test_samples": 380,
+    "duplicates_removed": 19,
+    "corrupt_images_removed": 0,
+    "class_distribution": {
+      "Apple___Apple_scab": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Apple___Black_rot": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Apple___Cedar_apple_rust": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Apple___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Blueberry___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Cherry_(including_sour)___Powdery_mildew": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Cherry_(including_sour)___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Corn_(maize)___Common_rust_": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Corn_(maize)___Northern_Leaf_Blight": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Corn_(maize)___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Grape___Black_rot": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Grape___Esca_(Black_Measles)": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Grape___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Orange___Haunglongbing_(Citrus_greening)": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Peach___Bacterial_spot": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Peach___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Pepper,_bell___Bacterial_spot": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Pepper,_bell___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Potato___Early_blight": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Potato___Late_blight": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Potato___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Raspberry___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Soybean___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Squash___Powdery_mildew": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Strawberry___Leaf_scorch": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Strawberry___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Bacterial_spot": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Early_blight": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Late_blight": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Leaf_Mold": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Septoria_leaf_spot": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Spider_mites Two-spotted_spider_mite": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Target_Spot": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___Tomato_mosaic_virus": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      },
+      "Tomato___healthy": {
+        "total": 100,
+        "train": 80,
+        "val": 10,
+        "test": 10
+      }
+    }
+  },
+  "domain_shift_dataset": {
+    "name": "PlantDoc (In-The-Wild Field Photography)",
+    "citation": "Pratik Kayal, D. Singh, et al. (2019). PlantDoc: A Dataset for Collaborative Computer Vision Applications in Agriculture. ACM CoNEXT 2019.",
+    "repository": "https://github.com/pratikkayal/PlantDoc-Dataset",
+    "license": "MIT License",
+    "samples_count": 0,
+    "purpose": "Unseen cross-domain testing to measure laboratory-to-field performance drop."
+  },
+  "authoritative_agricultural_provenance": [
+    "ICAR - Indian Agricultural Research Institute (IARI), New Delhi",
+    "ICAR - Central Potato Research Institute (CPRI), Shimla",
+    "ICAR - Indian Institute of Horticultural Research (IIHR), Bengaluru",
+    "ICAR - Indian Institute of Maize Research (IIMR), Ludhiana",
+    "TNAU Agritech Portal - Tamil Nadu Agricultural University",
+    "USDA Agricultural Research Service (ARS)"
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "dataset": "PlantDoc (Singh & Kayal et al., 2019)",
+  "sample_count": 83,
+  "supported_classes_count": 16,
+  "top1_accuracy": 0.1446,
+  "top3_accuracy": 0.3976,
+  "macro_precision": 0.1008,
+  "macro_recall": 0.1354,
+  "macro_f1": 0.1044,
+  "weighted_f1": 0.1117,
+  "average_confidence": 0.7386,
+  "rejection_rate_below_65": 0.3614,
+  "rejected_count": 30,
+  "per_class": {
+    "Apple___Apple_scab": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6
+    },
+    "Apple___Cedar_apple_rust": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6
+    },
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+      "precision": 0.2,
+      "recall": 0.3333,
+      "f1": 0.25,
+      "support": 3
+    },
+    "Corn_(maize)___Common_rust_": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 3
+    },
+    "Corn_(maize)___Northern_Leaf_Blight": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 3
+    },
+    "Grape___Black_rot": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 5
+    },
+    "Pepper,_bell___Bacterial_spot": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6
+    },
+    "Potato___Early_blight": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6
+    },
+    "Potato___Late_blight": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6
+    },
+    "Tomato___Bacterial_spot": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6
+    },
+    "Tomato___Early_blight": {
+      "precision": 0.1364,
+      "recall": 0.5,
+      "f1": 0.2143,
+      "support": 6
+    },
+    "Tomato___Late_blight": {
+      "precision": 0.1765,
+      "recall": 0.5,
+      "f1": 0.2609,
+      "support": 6
+    },
+    "Tomato___Septoria_leaf_spot": {
+      "precision": 0.5,
+      "recall": 0.3333,
+      "f1": 0.4,
+      "support": 6
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+      "precision": 0.6,
+      "recall": 0.5,
+      "f1": 0.5455,
+      "support": 6
+    },
+    "Tomato___Tomato_mosaic_virus": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 6
+    },
+    "Tomato___healthy": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 3
+    }
+  }
+}

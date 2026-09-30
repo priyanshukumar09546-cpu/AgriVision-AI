@@ -821,14 +821,27 @@ def detect_crop_disease():
 
     # Handle Low Confidence Diagnostic State (< 65%)
     if res.get("status") == "low_confidence":
+        image_url = f"/uploads/{filename}"
+        now_time = datetime.now().strftime("%I:%M %p")
         return jsonify({
             "success": True,
             "status": "low_confidence",
             "crop": res.get("crop", "Crop"),
             "disease": res.get("disease", "Unable to determine reliably from this image"),
+            "scientificName": "Diagnosis Inconclusive (< 65% Confidence)",
             "confidence": res.get("confidence", 0.0),
+            "severity": "Low",
             "message": res.get("message", "Unable to determine disease reliably from this image. Model confidence is below the diagnostic threshold (65%)."),
-            "metrics": res.get("metrics", {})
+            "metrics": res.get("metrics", {}),
+            "symptoms": ["Visual leaf features do not match any single condition with high statistical confidence."],
+            "causes": ["Unclear symptom presentation, poor lighting/angle, or unsupported condition."],
+            "treatments": {
+                "organic": ["Monitor the crop closely over 2-3 days for developing symptoms."],
+                "chemical": ["Avoid unverified chemical applications without laboratory confirmation."],
+                "preventive": ["Ensure proper spacing, drip irrigation, and inspect underside of leaves."]
+            },
+            "imageUrl": image_url,
+            "analyzedAt": now_time
         })
 
     image_url = f"/uploads/{filename}"
