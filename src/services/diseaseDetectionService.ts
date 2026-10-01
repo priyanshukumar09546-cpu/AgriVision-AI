@@ -5,7 +5,7 @@
  */
 
 import { getStoredAuthUser } from './authService';
-import { buildApiUrl, getAuthToken } from './apiClient';
+import { buildApiUrl, getAuthToken, PRODUCTION_BACKEND_URL } from './apiClient';
 
 export interface DiseaseDetectionResult {
   scanId?: string;
@@ -136,7 +136,9 @@ export async function detectCropDisease(
       preventive: Array.isArray(data.treatments?.preventive) ? data.treatments.preventive : [],
     },
     metrics: data.metrics,
-    imageUrl: data.imageUrl,
+    imageUrl: data.imageUrl
+      ? (data.imageUrl.startsWith('http') ? data.imageUrl : `${PRODUCTION_BACKEND_URL}${data.imageUrl}`)
+      : undefined,
     analyzedAt: data.analyzedAt || new Date().toLocaleTimeString(),
   };
 }

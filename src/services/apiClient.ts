@@ -3,18 +3,50 @@
  * Standardized HTTP client connecting frontend to backend services.
  */
 
+export const PRODUCTION_BACKEND_URL = 'https://agrivision-ai-ucy3.onrender.com';
+
 export function getApiBase(): string {
   try {
     const metaEnv = (typeof import.meta !== 'undefined' && import.meta.env) ? import.meta.env : {} as any;
-    const envUrl = metaEnv.VITE_API_URL || metaEnv.NEXT_PUBLIC_API_URL || '';
-    if (envUrl) {
+    const envUrl = (metaEnv.VITE_API_URL || metaEnv.NEXT_PUBLIC_API_URL || '').trim();
+
+    // 1. In browser runtime: check hostname
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+      // When running on Vercel or any public domain:
+      if (!isLocalhost) {
+        // If an explicit remote HTTPS URL is configured and not localhost, use it
+        if ((envUrl.startsWith('http://') || envUrl.startsWith('https://')) &&
+            !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+          const clean = envUrl.replace(/\/$/, '');
+          return clean.endsWith('/api') ? clean : `${clean}/api`;
+        }
+        // Canonical production Render backend URL
+        return `${PRODUCTION_BACKEND_URL}/api`;
+      }
+
+      // When running on localhost:
+      if (envUrl) {
+        const clean = envUrl.replace(/\/$/, '');
+        return clean.endsWith('/api') ? clean : `${clean}/api`;
+      }
+      return '/api';
+    }
+
+    // 2. Build-time / SSR
+    if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
       const clean = envUrl.replace(/\/$/, '');
       return clean.endsWith('/api') ? clean : `${clean}/api`;
+    }
+    if (metaEnv.PROD) {
+      return `${PRODUCTION_BACKEND_URL}/api`;
     }
   } catch {
     // ignore
   }
-  return '/api';
+  return `${PRODUCTION_BACKEND_URL}/api`;
 }
 
 export interface ApiResponse<T = any> {
@@ -57,10 +89,11 @@ export function buildApiUrl(endpoint: string): string {
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
 
   if (base.startsWith('http://') || base.startsWith('https://')) {
+    const baseOrigin = base.replace(/\/api$/, '');
     if (cleanEndpoint.startsWith('/api/')) {
-      return `${base.replace(/\/api$/, '')}${cleanEndpoint}`;
+      return `${baseOrigin}${cleanEndpoint}`;
     }
-    return `${base}${cleanEndpoint}`;
+    return `${baseOrigin}/api${cleanEndpoint}`;
   }
 
   if (cleanEndpoint.startsWith('/api/')) {

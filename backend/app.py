@@ -52,10 +52,39 @@ def allowed_file(filename: str) -> bool:
 # CORS & Production Security Headers Middleware
 @app.after_request
 def add_security_and_cors_headers(response):
-    cors_origin = os.getenv("CORS_ORIGINS", "http://localhost:5173").strip()
-    response.headers["Access-Control-Allow-Origin"] = cors_origin
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    origin = request.headers.get("Origin")
+    cors_env = os.getenv("CORS_ORIGINS", "").strip()
+
+    allowed_origins = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://localhost:4173",
+        "https://agri-vision.vercel.app",
+        "https://agrivision.vercel.app"
+    ]
+    if cors_env and cors_env != "*":
+        allowed_origins.extend([o.strip() for o in cors_env.split(",") if o.strip()])
+
+    if origin:
+        # Explicit matching for Vercel, localhost, or configured origins
+        if (
+            origin in allowed_origins 
+            or origin.endswith(".vercel.app") 
+            or "localhost" in origin 
+            or "127.0.0.1" in origin
+            or cors_env == "*"
+        ):
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+        else:
+            response.headers["Access-Control-Allow-Origin"] = allowed_origins[0]
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+    else:
+        response.headers["Access-Control-Allow-Origin"] = "*"
+
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-Requested-With, Accept"
     
     # Security Headers
     response.headers["X-Content-Type-Options"] = "nosniff"
@@ -785,12 +814,9 @@ def detect_crop_disease():
     if request.method == "OPTIONS":
         return "", 200
     
-    if "file" not in request.files:
-        return jsonify({"success": False, "error": "Please provide an image file."}), 400
-
-    file = request.files["file"]
+    file = request.files.get("file") or request.files.get("image")
     if not file or file.filename == "":
-        return jsonify({"success": False, "error": "Selected image file is empty."}), 400
+        return jsonify({"success": False, "error": "Selected image file is empty or missing. Please upload a crop leaf photo."}), 400
 
     if not allowed_file(file.filename):
         return jsonify({"success": False, "error": "Invalid file type. Only JPG, JPEG, PNG, and WEBP image files are allowed."}), 400

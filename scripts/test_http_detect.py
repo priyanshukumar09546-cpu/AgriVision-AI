@@ -20,11 +20,12 @@ def test_detect():
     body.write(b'\r\n')
     body.write(f'--{boundary}--\r\n'.encode('utf-8'))
 
-    # Test via Vite proxy
-    url = 'http://localhost:5173/api/detect'
-    req = urllib.request.Request(url, data=body.getvalue(), headers=headers, method='POST')
+    import sys
+    target = sys.argv[1] if len(sys.argv) > 1 else 'https://agrivision-ai-ucy3.onrender.com/api/detect'
+    print(f"Testing detection endpoint: {target}")
+    req = urllib.request.Request(target, data=body.getvalue(), headers=headers, method='POST')
     try:
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, timeout=30) as resp:
             data = json.loads(resp.read().decode('utf-8'))
             print("HTTP Status Code:", resp.status)
             print("Response JSON:")
@@ -32,7 +33,7 @@ def test_detect():
             assert data.get("success") is True
             assert data.get("crop") == "Tomato"
             assert data.get("disease") == "Early Blight"
-            print("\n>>> TEST PASSED: Successfully detected Tomato Early Blight via Vite proxy!")
+            print(f"\n>>> TEST PASSED: Successfully detected Tomato Early Blight via {target}!")
     except urllib.error.HTTPError as e:
         print("HTTP Error:", e.code, e.read().decode('utf-8'))
         raise e

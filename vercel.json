@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "https://agrivision-ai-ucy3.onrender.com/api/$1"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "https://agrivision-ai-ucy3.onrender.com/uploads/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
