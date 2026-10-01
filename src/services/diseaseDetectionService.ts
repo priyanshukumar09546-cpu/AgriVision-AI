@@ -5,7 +5,7 @@
  */
 
 import { getStoredAuthUser } from './authService';
-import { buildApiUrl, getAuthToken, PRODUCTION_BACKEND_URL } from './apiClient';
+import { buildApiUrl, getAuthToken, PRODUCTION_BACKEND_URL, PRODUCTION_DETECT_ENDPOINT } from './apiClient';
 
 export interface DiseaseDetectionResult {
   scanId?: string;
@@ -86,7 +86,16 @@ export async function detectCropDisease(
   const headers: Record<string, string> = {};
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const response = await fetch(buildApiUrl('/api/detect'), {
+  const resolvedUrl = buildApiUrl('/api/detect');
+  const targetUrl = (typeof window !== 'undefined' && 
+                     (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') && 
+                     !resolvedUrl.startsWith('http')) 
+    ? PRODUCTION_DETECT_ENDPOINT 
+    : resolvedUrl;
+
+  console.info('[AgriVision AI] Executing disease detection POST request to:', targetUrl);
+
+  const response = await fetch(targetUrl, {
     method: 'POST',
     headers,
     body: formData,

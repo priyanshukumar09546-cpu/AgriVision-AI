@@ -4,6 +4,7 @@
  */
 
 export const PRODUCTION_BACKEND_URL = 'https://agrivision-ai-ucy3.onrender.com';
+export const PRODUCTION_DETECT_ENDPOINT = 'https://agrivision-ai-ucy3.onrender.com/api/detect';
 
 export function getApiBase(): string {
   try {
@@ -15,33 +16,41 @@ export function getApiBase(): string {
       const hostname = window.location.hostname;
       const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
 
-      // When running on Vercel or any public domain:
-      if (!isLocalhost) {
-        // If an explicit remote HTTPS URL is configured and not localhost, use it
-        if ((envUrl.startsWith('http://') || envUrl.startsWith('https://')) &&
-            !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+      // When running on localhost (local development):
+      if (isLocalhost) {
+        if (envUrl && !envUrl.includes('vercel.app')) {
           const clean = envUrl.replace(/\/$/, '');
           return clean.endsWith('/api') ? clean : `${clean}/api`;
         }
-        // Canonical production Render backend URL
-        return `${PRODUCTION_BACKEND_URL}/api`;
+        return '/api';
       }
 
-      // When running on localhost:
-      if (envUrl) {
+      // When running in production (Vercel, custom domain, mobile browser, etc.):
+      // NEVER allow production to resolve to vercel.app, relative /api, or localhost!
+      if (
+        (envUrl.startsWith('http://') || envUrl.startsWith('https://')) &&
+        !envUrl.includes('localhost') &&
+        !envUrl.includes('127.0.0.1') &&
+        !envUrl.includes('vercel.app')
+      ) {
         const clean = envUrl.replace(/\/$/, '');
         return clean.endsWith('/api') ? clean : `${clean}/api`;
       }
-      return '/api';
+
+      // Canonical production Render backend URL
+      return `${PRODUCTION_BACKEND_URL}/api`;
     }
 
     // 2. Build-time / SSR
-    if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+    if (
+      envUrl &&
+      !envUrl.includes('localhost') &&
+      !envUrl.includes('127.0.0.1') &&
+      !envUrl.includes('vercel.app') &&
+      (envUrl.startsWith('http://') || envUrl.startsWith('https://'))
+    ) {
       const clean = envUrl.replace(/\/$/, '');
       return clean.endsWith('/api') ? clean : `${clean}/api`;
-    }
-    if (metaEnv.PROD) {
-      return `${PRODUCTION_BACKEND_URL}/api`;
     }
   } catch {
     // ignore
@@ -82,9 +91,27 @@ export function clearAuthToken(): void {
 
 export function buildApiUrl(endpoint: string): string {
   if (!endpoint) return getApiBase();
+
+  const isBrowser = typeof window !== 'undefined';
+  const isLocalhost = isBrowser && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  // Hard guarantee: detect endpoint in production MUST always resolve to Render backend
+  if (endpoint === '/api/detect' || endpoint === 'api/detect') {
+    if (!isLocalhost) {
+      return PRODUCTION_DETECT_ENDPOINT;
+    }
+  }
+
+  // If already an absolute URL
   if (endpoint.startsWith('http://') || endpoint.startsWith('https://')) {
+    // Safety guard: if running in production but the URL points to vercel.app or localhost, redirect to Render
+    if (!isLocalhost && (endpoint.includes('vercel.app') || endpoint.includes('localhost') || endpoint.includes('127.0.0.1'))) {
+      const path = endpoint.replace(/^https?:\/\/[^/]+/, '');
+      return `${PRODUCTION_BACKEND_URL}${path.startsWith('/') ? path : `/${path}`}`;
+    }
     return endpoint;
   }
+
   const base = getApiBase();
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
 
@@ -94,6 +121,14 @@ export function buildApiUrl(endpoint: string): string {
       return `${baseOrigin}${cleanEndpoint}`;
     }
     return `${baseOrigin}/api${cleanEndpoint}`;
+  }
+
+  // Safety guard: never return relative path in production
+  if (!isLocalhost) {
+    if (cleanEndpoint.startsWith('/api/')) {
+      return `${PRODUCTION_BACKEND_URL}${cleanEndpoint}`;
+    }
+    return `${PRODUCTION_BACKEND_URL}/api${cleanEndpoint}`;
   }
 
   if (cleanEndpoint.startsWith('/api/')) {
